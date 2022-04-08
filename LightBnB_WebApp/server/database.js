@@ -127,8 +127,8 @@ exports.getAllReservations = getAllReservations;
   }
 
   if (options.minimum_price_per_night && options.maximum_price_per_night) {
-    queryParams.push(`${options.minimum_price_per_night}`);
-    queryParams.push(`${options.maximum_price_per_night}`);
+    queryParams.push(`${options.minimum_price_per_night}`*100);
+    queryParams.push(`${options.maximum_price_per_night}`*100);
     queryString += `AND properties.cost_per_night >= $${queryParams.length-1}`
     queryString += `AND properties.cost_per_night <= $${queryParams.length}`
   }
@@ -147,7 +147,7 @@ exports.getAllReservations = getAllReservations;
 
   return pool.query(queryString, queryParams)
     .then((result) => {
-      return result.rows;
+      return Promise.resolve(result.rows);
     })
 };
 exports.getAllProperties = getAllProperties;
